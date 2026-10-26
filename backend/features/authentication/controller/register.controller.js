@@ -5,11 +5,19 @@ const max_length = 72;
 const min_length = 8;
 
 export async function register_controller(c) {
-  const { name, password, email } = c.req.body;
+  const body = await c.req.json();
+  const { name, password, repassword, email } = body;
 
   if (!email || !password || !name) {
     throw new App_error(
       " email or pasword or name is missing",
+      400,
+      "VALIDATION_ERROR",
+    );
+  }
+  if (password !== repassword) {
+    throw new App_error(
+      "password mismatch",
       400,
       "VALIDATION_ERROR",
     );
@@ -37,7 +45,7 @@ export async function register_controller(c) {
     );
   }
 
-  await register_service({ reference: req.user._id, name, password, email });
+  await register_service({ name, email, password })
   return new App_response(
     "a user is registered successfully",
     200,

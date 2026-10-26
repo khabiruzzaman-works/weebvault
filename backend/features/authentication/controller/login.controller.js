@@ -6,7 +6,8 @@ import { cookie_options } from "../../../utils/cookie_options.js";
 
 
 export default async function login_controller(c) {
-  const { email, password } = c.req.body;
+   const body =  await c.req.json();
+  const { email, password } = body;
   if (!email || !password) {
     throw new App_error(
       " email or pasword is missing",
@@ -22,8 +23,8 @@ export default async function login_controller(c) {
   }
 
   const logged_user = await login_service({ email, password });
-  const access_token = token_generator({ _id: logged_user._id }, "access");
-  const refresh_token = token_generator(
+  const access_token = await  token_generator({ _id: logged_user._id }, "access");
+  const refresh_token = await  token_generator(
     {
       _id: logged_user._id,
       name: logged_user.name,
@@ -33,13 +34,14 @@ export default async function login_controller(c) {
   );
 
   await update_refresh_token(logged_user._id, refresh_token);
-  setCookie(c, "refresh_token", refresh_token, cookie_options);
+  setCookie(c, "refreshToken", refresh_token, cookie_options);
 
   return new App_response("login successful", 200, {
     user: {
       _id: logged_user._id,
       role: logged_user.role,
       name: logged_user.name,
+      email:logged_user.email
     },
     accessToken: access_token,
   }).send_response(c);
