@@ -1,11 +1,40 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/Auth_context.jsx";
+import login_controller from "../controller/login.controller";
 
 export default function Login() {
   const [form, set_form] = useState({});
+  const [logging, set_logging] = useState(false);
+  const {user,user_loading,set_user,set_access_token_globally } = useAuth();
   const navigate = useNavigate();
+
+  if (user_loading) {
+    console.log(` user data is loading`);
+    return (<>
+    return (<><div className="w-full min-h-screen bg-rose-700 text-6xl text-rose-200">Loading</div></>)
+      {/* add a loading screen*/}
+    </>)
+  }
+  if (!user) {
+    <Navigate to={"/profile"} replace={true} />
+  }
+
   async function submit_handler(e) {
     e.preventDefault();
+    set_logging(true);
+    const result = await login_controller(form);
+    if (!result.success) {
+      console.log(`error : ${result.message}`);
+      return set_logging(false);
+    }
+    console.log(`success : ${result.message},welcome board ${result?.data?.user?.name}`);
+
+    set_user(result?.data?.user);
+    set_access_token_globally(result?.data?.accessToken);
+
+    set_logging(false);
+    navigate("/profile");
   }
   function input_handler(e) {
     set_form(function (prev) {
@@ -53,6 +82,7 @@ export default function Login() {
               </span>
             </div>
             <button
+              disabled={logging}
               type="submit"
               className="w-full py-2 px-3.5 bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-600"
             >

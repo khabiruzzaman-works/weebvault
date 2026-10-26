@@ -1,11 +1,36 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import register_controller from "../controller/register.controller";
+import { useAuth } from "../../../context/Auth_context";
 
 export default function Register() {
   const [form, set_form] = useState({});
+  const [registering, set_registering] = useState(false);
+  const { user, user_loading } = useAuth();
   const navigate = useNavigate();
+  if (user_loading) {
+    console.log(` user data is loading`);
+    return (<>
+    return (<><div className="w-full min-h-screen bg-rose-700 text-6xl text-rose-200">Loading</div></>)
+      {/* add a loading screen*/}
+    </>)
+  }
+  if (!user) {
+    <Navigate to={"/profile"} replace={true} />
+  }
+
+
   async function submit_handler(e) {
     e.preventDefault();
+    set_registering(true);
+    const data = await register_controller(form);
+    if (!data.success) {
+      console.log(`error : ${data.message}`);
+      return set_registering(false);
+    }
+    console.log(`success : ${data.message}`);
+    set_registering(false);
+    navigate("/login");
   }
   function input_handler(e) {
     set_form(function (prev) {
@@ -56,7 +81,7 @@ export default function Register() {
               <input
                 type="password"
                 onChange={input_handler}
-                name="re-password"
+                name="repassword"
                 value={form.value}
                 placeholder="Match the password"
                 className="border border-blue-400 rounded-md py-1 px-2"
@@ -74,6 +99,7 @@ export default function Register() {
               </span>
             </div>
             <button
+              disabled={registering}
               type="submit"
               className="w-full py-2 px-3.5 bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-600"
             >
