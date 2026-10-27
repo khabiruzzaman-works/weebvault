@@ -3,7 +3,7 @@ import variables from "./config/ENV_VARIABLES.js";
 import connect_to_db from "./config/mongodb.js";
 
 try {
-  connect_to_db();
+ await connect_to_db();
   Bun.serve({
     port: variables.PORT,
     fetch: app.fetch,

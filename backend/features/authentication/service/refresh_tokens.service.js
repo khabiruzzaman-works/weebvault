@@ -15,7 +15,7 @@ export default async function refresh_tokens_service(token) {
     );
   } catch (error) {
 
-    throw new App_error("token is expired", 401, "TOKEN_EXPIRED");
+    throw new App_error("token is expired", 401, "INVALID_TOKEN");
   }
 
   const authorized_user = await User.findById(decoded_user._id).select(
