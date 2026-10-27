@@ -10,13 +10,12 @@ export default function Register() {
   const navigate = useNavigate();
   if (user_loading) {
     console.log(` user data is loading`);
-    return (<>
     return (<><div className="w-full min-h-screen bg-rose-700 text-6xl text-rose-200">Loading</div></>)
       {/* add a loading screen*/}
-    </>)
+
   }
-  if (!user) {
-    <Navigate to={"/profile"} replace={true} />
+  if (user) {
+   return <Navigate to={"/profile"} replace={true} />
   }
 
 
@@ -49,7 +48,7 @@ export default function Register() {
                 type="text"
                 onChange={input_handler}
                 name="name"
-                value={form.value}
+                value={form.name}
                 placeholder="Enter your fullname"
                 className="border border-blue-400 rounded-md py-1 px-2"
               />
@@ -60,7 +59,7 @@ export default function Register() {
                 type="email"
                 onChange={input_handler}
                 name="email"
-                value={form.value}
+                value={form.email}
                 placeholder="Enter your email"
                 className="border border-blue-400 rounded-md py-1 px-2"
               />
@@ -71,7 +70,7 @@ export default function Register() {
                 type="password"
                 onChange={input_handler}
                 name="password"
-                value={form.value}
+                value={form.password}
                 placeholder="Create a STRONG password"
                 className="border border-blue-400 rounded-md py-1 px-2"
               />
@@ -82,7 +81,7 @@ export default function Register() {
                 type="password"
                 onChange={input_handler}
                 name="repassword"
-                value={form.value}
+                value={form.repassword}
                 placeholder="Match the password"
                 className="border border-blue-400 rounded-md py-1 px-2"
               />

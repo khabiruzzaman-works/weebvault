@@ -6,13 +6,18 @@ import { hash_token } from "../../../utils/token_hasher.js";
 import { token_generator } from "../../../utils/tokens_generator.js";
 
 export default async function refresh_tokens_service(token) {
-  const decoded_user = await verify(
-    token,
-    variables.REFRESH_TOKEN_SECRET_KEY,"HS256",
-  );
-  if (!decoded_user) {
+  let decoded_user;
+
+  try {
+    decoded_user = await verify(
+      token,
+      variables.REFRESH_TOKEN_SECRET_KEY,"HS256",
+    );
+  } catch (error) {
+
     throw new App_error("token is expired", 401, "TOKEN_EXPIRED");
   }
+
   const authorized_user = await User.findById(decoded_user._id).select(
     "-password",
   );

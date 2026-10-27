@@ -11,13 +11,11 @@ export default function Login() {
 
   if (user_loading) {
     console.log(` user data is loading`);
-    return (<>
     return (<><div className="w-full min-h-screen bg-rose-700 text-6xl text-rose-200">Loading</div></>)
       {/* add a loading screen*/}
-    </>)
   }
-  if (!user) {
-    <Navigate to={"/profile"} replace={true} />
+  if (user) {
+  return  <Navigate to={"/profile"} replace={true} />
   }
 
   async function submit_handler(e) {
@@ -53,7 +51,7 @@ export default function Login() {
                 type="email"
                 onChange={input_handler}
                 name="email"
-                value={form.value}
+                value={form.email}
                 placeholder="Enter your email"
                 className="border border-blue-400 rounded-md py-1 px-2"
               />
@@ -64,7 +62,7 @@ export default function Login() {
                 type="password"
                 onChange={input_handler}
                 name="password"
-                value={form.value}
+                value={form.password}
                 placeholder="Create a STRONG password"
                 className="border border-blue-400 rounded-md py-1 px-2"
               />

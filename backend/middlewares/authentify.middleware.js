@@ -24,14 +24,14 @@ export async function authentify(c, next) {
   } catch (error) {
     console.log(`${error}`);
 
-    throw new App_error("token is invalid", 401, "TOKEN_IS_INVALID");
+    throw new App_error("token is expired", 401, "TOKEN_EXPIRED");
   }
   const authorized_user = await User.findById(decoded_user._id).select(
     "-password",
   );
 
   if (!authorized_user) {
-    throw new App_error("token is expired", 401, "TOKEN_EXPIRED");
+    throw new App_error("token is invalid", 401, "TOKEN_IS_INVALID");
   }
 
   c.set("user", authorized_user);
