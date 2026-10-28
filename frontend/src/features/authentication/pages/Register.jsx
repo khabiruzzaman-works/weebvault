@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import register_controller from "../controller/register.controller";
-import { useAuth } from "../../../context/Auth_context";
+import register_controller from "../controller/register.controller.js";
+import { useAuth } from "../../../context/Auth_context.jsx";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 
 export default function Register() {
   const [form, set_form] = useState({});
@@ -10,8 +11,7 @@ export default function Register() {
   const navigate = useNavigate();
   if (user_loading) {
     console.log(` user data is loading`);
-    return (<><div className="w-full min-h-screen bg-rose-700 text-6xl text-rose-200">Loading</div></>)
-      {/* add a loading screen*/}
+    return <Loading_screen />;
 
   }
   if (user) {

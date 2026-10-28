@@ -1,11 +1,12 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../../context/Auth_context";
+import Loading_screen from "../../../components/pages/Loading_screen";
 
 export default function Profile() {
   const { user, user_loading } = useAuth();
   if (user_loading) {
     console.log(`user data is loading`);
-    return (<><div className="w-full min-h-screen bg-rose-700 text-6xl text-rose-200">Loading</div></>);
+    return <Loading_screen/>
   }
   if (!user) {
     return <Navigate to={"/login"} replace={true} />
