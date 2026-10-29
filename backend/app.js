@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import authentication_route from "./features/authentication/route/authentication.route.js";
+import anime_route from "./features/anime/route/anime.route.js";
 import { App_error } from "./utils/app_outcome_handler.js";
 
 const app = new Hono();
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.route("/api/authentication", authentication_route);
+app.route("/api/anime", anime_route);
 //
 // app.get("/", function (c) {
 //  return c.json("hi from app")
